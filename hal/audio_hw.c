@@ -81,6 +81,10 @@
 
 #include "audio_amplifier.h"
 
+#ifdef ENABLE_TFA98XX_FEEDBACK
+#include "tfa98xx_feedback.h"
+#endif
+
 #ifdef DYNAMIC_LOG_ENABLED
 #include <log_xml_parser.h>
 #define LOG_MASK HAL_MOD_FILE_AUDIO_HW
@@ -1325,7 +1329,13 @@ int enable_snd_device(struct audio_device *adev,
         }
         audio_extn_dev_arbi_acquire(snd_device);
         audio_route_apply_and_update_path(adev->audio_route, device_name);
+<<<<<<< HEAD
         amplifier_set_feedback(adev, snd_device, true);
+=======
+#ifdef ENABLE_TFA98XX_FEEDBACK
+        audio_extn_tfa98xx_start_feedback(adev, snd_device);
+#endif
+>>>>>>> f6428e24 (hal: Add tfa98xx feedback extension)
 
         if (SND_DEVICE_OUT_HEADPHONES == snd_device &&
             !adev->native_playback_enabled &&
@@ -1427,7 +1437,15 @@ int disable_snd_device(struct audio_device *adev,
         }
 
         audio_extn_utils_release_snd_device(snd_device);
+<<<<<<< HEAD
         amplifier_set_feedback(adev, snd_device, false);
+=======
+
+#ifdef ENABLE_TFA98XX_FEEDBACK
+        audio_extn_tfa98xx_stop_feedback(adev, snd_device);
+#endif
+
+>>>>>>> f6428e24 (hal: Add tfa98xx feedback extension)
     } else {
         if (platform_split_snd_device(adev->platform,
                     snd_device,
